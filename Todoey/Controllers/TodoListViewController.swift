@@ -22,20 +22,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         
        
-        
-//        let newItem = Item(context: self.context)
-//        newItem.title = "Find Mike"
-//        itemArray.append(newItem)
-//        
-//        let newItem2 = Item()
-//        newItem2.title = "Buy Eggos"
-//        itemArray.append(newItem2)
-//        
-//        let newItem3 = Item()
-//        newItem3.title = "Destroy Demogorgon"
-//        itemArray.append(newItem3)
-//        
-        //loadItems()
+        loadItems()
         
     }
     
@@ -60,6 +47,9 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
+        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
@@ -104,9 +94,7 @@ class TodoListViewController: UITableViewController {
     
     func saveItems(){
         
-        
         do{
-            
             try context.save()
         } catch {
             print("Error saving context:\(error)")
@@ -115,20 +103,16 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-//    func loadItems(){
-//        if let data = try? Data(contentsOf: dataFilePath!){
-//            let decoder = PropertyListDecoder()
-//
-//            do {
-//                itemArray = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("error decoding item array, \(error)")
-//            }
-//
-//
-//        }
-//
-//    }
+    func loadItems(){
+        let request:NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do {
+            itemArray = try context.fetch(request)
+        } catch  {
+            print("Error fetching data from context \(error)")
+        }
+        
+    }
 
 }
 
